@@ -10,11 +10,6 @@
 #              SOURCES CITED: CS493 Modules 2 and 3. Google Cloud 'Building a Python3 App on App Engine'
 #                             Tutorial. (The same one that was used for Assignment 1)
 #              *******************************************************************************************
-#"https://hw2-dalindad.an.r.appspot.com/"
-# "http://127.0.0.1:8080"
-
-
-# FIX EDIT REVIEWS. PARTIAL EDIT ONLY. RE READ SPECS
 
 from flask import Flask, request
 from google.cloud import datastore
