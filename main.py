@@ -10,8 +10,11 @@
 #              SOURCES CITED: CS493 Modules 2 and 3. Google Cloud 'Building a Python3 App on App Engine'
 #                             Tutorial. (The same one that was used for Assignment 1)
 #              *******************************************************************************************
+#"https://hw2-dalindad.an.r.appspot.com/"
+# "http://127.0.0.1:8080"
 
 
+# FIX EDIT REVIEWS. PARTIAL EDIT ONLY. RE READ SPECS
 
 from flask import Flask, request
 from google.cloud import datastore
@@ -122,7 +125,7 @@ def post_business():
 
 def create_entity(json_request, entity_type, entity_attributes):
     """
-    A generic 
+    A generic function for creating entities based on the provided json request.
     """
     new_entity = datastore.Entity(key=client.key(entity_type))
     new_entity.update(create_post_dict(json_request, entity_attributes))
@@ -174,7 +177,7 @@ def edit_business(id):
     return (POST_PUT_ERROR, 400)
 
 
-def edit_entity(update_entity, json_request, entity_attributes):
+def edit_entity(entity, json_request, entity_attributes):
     """
     Edits an entity with the provided json request body, by calling the
     create post dict function. This function also adds an id attribute for 
@@ -182,6 +185,7 @@ def edit_entity(update_entity, json_request, entity_attributes):
     a response code of 200. This function assumes that the existence of the entity
     to be updated has already been validated.
     """
+    update_entity = entity
     update_entity.update(create_post_dict(json_request, entity_attributes))
     client.put(update_entity)
     update_entity = add_id_attribute([update_entity], False)
@@ -198,7 +202,7 @@ def delete_business(id):
     if requested_business is None:
         return get_id_error(BUSINESSES)
     entities_to_delete = [(id, BUSINESSES)]
-    query_results = create_query_list(REVIEWS, ["business_id", "==", int(id)])
+    query_results = create_query_list(REVIEWS, ["business_id", "=", int(id)])
     for result in query_results:
         entities_to_delete.append((result['id'], REVIEWS))
     return delete_entities_from_list(entities_to_delete)
@@ -222,7 +226,7 @@ def get_businesses_by_owner(id):
     """
     Gets and returns all businesses associated with the given owner id.
     """
-    return create_query_list(BUSINESSES, ["owner_id", "==", int(id)])
+    return create_query_list(BUSINESSES, ["owner_id", "=", int(id)])
     
 
 @app.route('/' + REVIEWS, methods=['POST'])
@@ -240,11 +244,11 @@ def post_review():
         business = get_entity_by_id(int(body_content["business_id"]), BUSINESSES)
         if business is None:
             return get_id_error(BUSINESSES)
-        user_reviews = create_query_list(REVIEWS, ["user_id", "==", int(body_content["user_id"])])
+        user_reviews = create_query_list(REVIEWS, ["user_id", "=", int(body_content["user_id"])])
         for review in user_reviews:
             if review["business_id"] == body_content["business_id"]:
                 return ({"Error": "You have already submitted a review for this business. You can update your previous review, or delete it and submit a new review"}, 409)
-        return create_entity(body_content, BUSINESSES, BUSINESSES_REQUIRED_ATTRIBUTES)
+        return create_entity(body_content, REVIEWS, REVIEWS_REQUIRED_ATTRIBUTES)
     return (POST_PUT_ERROR, 400)
 
 
@@ -270,7 +274,8 @@ def edit_review(id):
     if requested_review is None:
         return get_id_error(REVIEWS)
     body_content = request.get_json()
-    valid_request = validate_post(body_content, REVIEWS_REQUIRED_ATTRIBUTES)
+    edit_review_required_attributes = ["stars"]
+    valid_request = validate_post(body_content, edit_review_required_attributes)
     if valid_request:
         return edit_entity(requested_review, body_content, REVIEWS_REQUIRED_ATTRIBUTES)   
     return (POST_PUT_ERROR, 400)
@@ -293,7 +298,7 @@ def get_reviews_by_user(id):
     """
     Returns all reviews associated with the given user.
     """
-    return create_query_list(REVIEWS, ["user_id", "==", int(id)])
+    return create_query_list(REVIEWS, ["user_id", "=", int(id)])
 
 
 if __name__ == '__main__':
