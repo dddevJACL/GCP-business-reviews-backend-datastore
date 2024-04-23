@@ -1,3 +1,17 @@
+# Name: Daniel Dalinda
+# OSU Email: dalindad@oregonstate.edu
+# Github: dddevJACL
+# Course: CS493 - Cloud Application Development
+# Assignment: Assignment 2 - REST API Implementation with GAE and Cloud Datastore
+# Due Date: April 22nd, 2024
+# Description: A REST API allowing for CRUD for Business and Review entities. This API uses Flask, GAE and
+#              Cloud Datastore.
+#              ******************************************************************************************
+#              SOURCES CITED: CS493 Modules 2 and 3. Google Cloud 'Building a Python3 App on App Engine'
+#                             Tutorial. (The same one that was used for Assignment 1)
+#              *******************************************************************************************
+
+
 from flask import Flask, request
 from google.cloud import datastore
 
@@ -205,7 +219,7 @@ def delete_entities_from_list(entity_list):
 @app.route('/owners/<int:id>' + BUSINESSES, methods=['GET'])
 def get_businesses_by_owner(id):
     """
-    TODO
+    Gets and returns all businesses associated with the given owner id.
     """
     return create_query_list(BUSINESSES, ["owner_id", "==", int(id)])
     
@@ -213,7 +227,11 @@ def get_businesses_by_owner(id):
 @app.route('/' + REVIEWS, methods=['POST'])
 def post_review():
     """
-    TODO
+    Creates a review for a business given that:
+        1. The request is valid (all required attributes are included in the request) (else return 400)
+        2. The business that is being reviewed exists in datastore (else return 404)
+        3. The user has not already created a review for the given business (else return 409)
+    If these criteria or met, the review is posted in datastore, and a json response is returned along with a 200 status code.
     """
     body_content = request.get_json()
     valid_request = validate_post(body_content, REVIEWS_REQUIRED_ATTRIBUTES)
@@ -232,7 +250,7 @@ def post_review():
 @app.route('/' + REVIEWS + '/<int:id>', methods=['GET'])
 def get_review(id):
     """
-    TODO
+    Gets and returns a review with the given id, if it exists, else 404 is returned.
     """
     requested_review = get_entity_by_id(id, REVIEWS)
     if requested_review is None:
@@ -243,7 +261,9 @@ def get_review(id):
 @app.route('/' + REVIEWS + '/<int:id>', methods=['PUT'])
 def edit_review(id):
     """
-    TODO
+    Edits a review with the given id. If the review doesnt exist already, 404 is returned. If the
+    request is invalid, 400 is returned. Else the updated json response is returned along with a status
+    code of 200.
     """
     requested_review = get_entity_by_id(id, REVIEWS)
     if requested_review is None:
@@ -258,7 +278,8 @@ def edit_review(id):
 @app.route('/' + REVIEWS + '/<int:id>', methods=['DELETE'])
 def delete_review(id):
     """
-    TODO
+    The review corresponding to the given id is deleted, if it exists.
+    If not, 404 is returned.
     """
     requested_review = get_entity_by_id(id, REVIEWS)
     if requested_review is None:
@@ -269,7 +290,7 @@ def delete_review(id):
 @app.route('/users/<int:id>' + REVIEWS, methods=['GET'])
 def get_reviews_by_user(id):
     """
-    TODO
+    Returns all reviews associated with the given user.
     """
     return create_query_list(REVIEWS, ["user_id", "==", int(id)])
 
