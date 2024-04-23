@@ -12,6 +12,7 @@
 #              *******************************************************************************************
 
 
+
 from flask import Flask, request
 from google.cloud import datastore
 
@@ -169,11 +170,11 @@ def edit_business(id):
     body_content = request.get_json()
     valid_request = validate_post(body_content, BUSINESSES_REQUIRED_ATTRIBUTES)
     if valid_request:
-        return edit_entity(body_content, BUSINESSES_REQUIRED_ATTRIBUTES)   
+        return edit_entity(requested_business, body_content, BUSINESSES_REQUIRED_ATTRIBUTES)   
     return (POST_PUT_ERROR, 400)
 
 
-def edit_entity(json_request, entity_attributes):
+def edit_entity(update_entity, json_request, entity_attributes):
     """
     Edits an entity with the provided json request body, by calling the
     create post dict function. This function also adds an id attribute for 
@@ -271,7 +272,7 @@ def edit_review(id):
     body_content = request.get_json()
     valid_request = validate_post(body_content, REVIEWS_REQUIRED_ATTRIBUTES)
     if valid_request:
-        return edit_entity(body_content, REVIEWS_REQUIRED_ATTRIBUTES)   
+        return edit_entity(requested_review, body_content, REVIEWS_REQUIRED_ATTRIBUTES)   
     return (POST_PUT_ERROR, 400)
 
 
