@@ -29,7 +29,7 @@ def index():
     """
     The main route of the API. Tells users to navigate to relevant url
     """
-    return 'Please navigate to /' + BUSINESSES + "or /" + REVIEWS + "to use this API"
+    return 'Please navigate to /' + BUSINESSES + " or /" + REVIEWS + " to use this API"
 
 
 def get_id_error(entity_type):
