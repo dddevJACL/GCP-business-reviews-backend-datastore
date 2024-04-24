@@ -11,6 +11,7 @@
 #                             Tutorial. (The same one that was used for Assignment 1)
 #              *******************************************************************************************
 
+
 from flask import Flask, request
 from google.cloud import datastore
 
@@ -272,7 +273,24 @@ def edit_review(id):
     edit_review_required_attributes = ["stars"]
     valid_request = validate_post(body_content, edit_review_required_attributes)
     if valid_request:
-        return edit_entity(requested_review, body_content, REVIEWS_REQUIRED_ATTRIBUTES)   
+        requested_review.update({
+            "stars": body_content["stars"]
+        })
+        if "user_id" in body_content:
+            requested_review.update({
+            "user_id": body_content["user_id"]
+        })
+        if "business_id" in body_content:
+            requested_review.update({
+            "business_id": body_content["business_id"]
+        })
+        if "review_text" in body_content:
+            requested_review.update({
+            "review_text": body_content["review_text"]
+        })
+        client.put(requested_review)
+        requested_review["id"] = requested_review.key.id
+        return (requested_review, 200)
     return (POST_PUT_ERROR, 400)
 
 
