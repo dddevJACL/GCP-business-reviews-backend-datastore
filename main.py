@@ -217,7 +217,7 @@ def delete_entities_from_list(entity_list):
     return ('', 204)
 
 
-@app.route('/owners/<int:id>' + BUSINESSES, methods=['GET'])
+@app.route('/owners/<int:id>/' + BUSINESSES, methods=['GET'])
 def get_businesses_by_owner(id):
     """
     Gets and returns all businesses associated with the given owner id.
@@ -306,7 +306,7 @@ def delete_review(id):
     return delete_entities_from_list([(id, REVIEWS)])
 
 
-@app.route('/users/<int:id>' + REVIEWS, methods=['GET'])
+@app.route('/users/<int:id>/' + REVIEWS, methods=['GET'])
 def get_reviews_by_user(id):
     """
     Returns all reviews associated with the given user.
