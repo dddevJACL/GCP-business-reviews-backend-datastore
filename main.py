@@ -1,18 +1,3 @@
-# Name: Daniel Dalinda
-# OSU Email: dalindad@oregonstate.edu
-# Github: dddevJACL
-# Course: CS493 - Cloud Application Development
-# Assignment: Assignment 2 - REST API Implementation with GAE and Cloud Datastore
-# Due Date: April 22nd, 2024
-# (Submitted late): April 23rd, 2024
-# Description: A REST API allowing for CRUD for Business and Review entities. This API uses Flask, GAE and
-#              Cloud Datastore.
-#              ******************************************************************************************
-#              SOURCES CITED: CS493 Modules 2 and 3. Google Cloud 'Building a Python3 App on App Engine'
-#                             Tutorial. (The same one that was used for Assignment 1)
-#              *******************************************************************************************
-
-
 from flask import Flask, request
 from google.cloud import datastore
 
